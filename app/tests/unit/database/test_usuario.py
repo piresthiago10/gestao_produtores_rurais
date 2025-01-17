@@ -1,5 +1,7 @@
-from app.models.usuarios import Usuario
-from app.tests.fixtures.usuarios import users_in_db
+import pytest
+from sqlalchemy.exc import IntegrityError
+from app.models.usuario import Usuario
+from app.tests.fixtures.usuario import users_in_db
 
 def test_create_user(db):
     """Testa a criação de um novo usuário."""
@@ -23,6 +25,45 @@ def test_create_user(db):
     assert new_user.tipo == "comum"
     assert new_user.ativo is True
     
+    # usuário já existe
+    duplicate_user = Usuario(
+        nome="Pedro da Silva",
+        cpf_cnpj="93231382076",
+        telefone="11985768364",
+        email="pedro.silva@teste.com.br",
+        senha="123Abc!!",
+        tipo="comum",
+        ativo=True
+    )
+    db.add(duplicate_user)
+    with pytest.raises(IntegrityError):
+        db.commit()
+
+    db.rollback()
+
+def test_verify_password(db):
+    """Testa a verificação de senha."""
+    new_user = Usuario(
+        nome = "Pedro da Silva",
+        cpf_cnpj = "93231382076",
+        telefone = "11985768364",
+        email = "pedro.silva@teste.com.br",
+        senha = "123Abc!!",
+        tipo = "comum",
+        ativo = True
+    )
+
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    # não permite acesso diretamente da senha
+    with pytest.raises(AttributeError) as excinfo:
+        new_user.senha
+    excinfo.match("A senha não pode ser acessada diretamente.")
+
+    assert new_user.verify_password("123Abc!!") is True
+
 def test_get_users(db, users_in_db):
     """Testa a obtenção de usuários do banco de dados."""
     users = db.query(Usuario).all()

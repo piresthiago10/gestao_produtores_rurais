@@ -1,6 +1,6 @@
 import pytest
 from sqlalchemy.orm import Session
-from app.models.usuarios import Usuario
+from app.models.usuario import Usuario
 
 @pytest.fixture(scope="function")
 def users_in_db(db: Session):

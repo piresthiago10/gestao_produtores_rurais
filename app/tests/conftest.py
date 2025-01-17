@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.database.database import DataBase, Base
-from app.models.usuarios import Usuario
+from app.models.usuario import Usuario
 from fastapi.testclient import TestClient
 from app.main import app
 from app.config import DATABASE
