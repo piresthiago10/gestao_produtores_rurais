@@ -1,12 +1,6 @@
 from fastapi import FastAPI
 from app.database.database import DataBase, Base
 from app.routers import usuario
-from app.config import DATABASE
-
-DataBase = DataBase(DATABASE)
-engine = DataBase._create_engine()
-
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Gestão de Produtores Rurais",

@@ -1,9 +1,10 @@
 import pytest
-from sqlalchemy.orm import Session
-from app.models.produtor import Produtor
+import pytest_asyncio
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.models.models import Produtor
 
-@pytest.fixture(scope="function")
-def producers_in_db(db: Session):
+@pytest_asyncio.fixture(scope="function")
+async def producers_in_db(get_db: AsyncSession):
     """Fixture para criar três produtores no banco de dados para os testes."""
     producers = [
         Produtor(
@@ -34,10 +35,8 @@ def producers_in_db(db: Session):
             ativo=True
         )
     ]
-
-    db.add_all(producers)
-    db.commit()
-    for producer in producers:
-        db.refresh(producer)
+    async with get_db.begin():
+        get_db.add_all(producers)
+    await get_db.commit()
 
     return producers

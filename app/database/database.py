@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
 class Base(DeclarativeBase):
     """Classe de base para o banco de dados."""
@@ -23,10 +24,10 @@ class DataBase:
     
     def _create_engine(self) -> object:
         """Cria o engine de conexão com o banco de dados."""
-        DATABASE_URL = "sqlite:///./app.db"
+        DATABASE_URL = "sqlite+aiosqlite:///./app.db"
         # DATABASE_URL = f"{self.connection}://{self.user}:{self.password}@{self.host}/{self.db_name}"
 
-        engine = create_engine(
+        engine = create_async_engine(
             DATABASE_URL,
             connect_args={"check_same_thread": self.check_same_thread}
         )
@@ -35,12 +36,14 @@ class DataBase:
     def _create_session(self) -> sessionmaker:
         """Cria a sessão de conexão com o banco de dados."""
         engine = self._create_engine()
-        return sessionmaker(autocommit=self.autocommit, autoflush=self.autoflush, bind=engine)
+        return async_sessionmaker(autocommit=self.autocommit, autoflush=self.autoflush, bind=engine)
 
-    def get_db(self) -> object:
+    async def get_db(self) -> object:
         """Retorna a sessão de conexão com o banco de dados."""
-        db = self._create_session()
+        async with self._create_engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        session = self._create_session()
         try:
-            yield db
+            yield session
         finally:
-            db.close()
+            session.close()

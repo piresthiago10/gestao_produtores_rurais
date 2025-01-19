@@ -1,9 +1,10 @@
 import pytest
-from sqlalchemy.orm import Session
-from app.models.usuario import Usuario
+import pytest_asyncio
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.models.models import Usuario
 
-@pytest.fixture(scope="function")
-def users_in_db(db: Session):
+@pytest_asyncio.fixture(scope="function")
+async def users_in_db(get_db: AsyncSession):
     """Fixture para criar três usuários no banco de dados para os testes."""
     users = [
         Usuario(
@@ -35,9 +36,8 @@ def users_in_db(db: Session):
         )
     ]
 
-    db.add_all(users)
-    db.commit()
-    for user in users:
-        db.refresh(user)
+    async with get_db.begin():
+        get_db.add_all(users)
+    await get_db.commit()
 
     return users

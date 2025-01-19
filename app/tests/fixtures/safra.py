@@ -1,9 +1,10 @@
 import pytest
-from sqlalchemy.orm import Session
-from app.models.safra import Safra
+import pytest_asyncio
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.models.models import Safra
 
-@pytest.fixture(scope="function")
-def crops_in_db(db: Session):
+@pytest_asyncio.fixture(scope="function")
+async def crops_in_db(get_db: AsyncSession):
     """Fixture para criar três safras no banco de dados para os testes."""
     crops = [
         Safra(
@@ -35,9 +36,8 @@ def crops_in_db(db: Session):
         )
     ]
 
-    db.add_all(crops)
-    db.commit()
-    for crop in crops:
-        db.refresh(crop)
+    async with get_db.begin():
+        get_db.add_all(crops)
+    await get_db.commit()
 
     return crops
