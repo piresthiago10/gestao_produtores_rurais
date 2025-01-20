@@ -49,6 +49,7 @@ class CRUD:
             await self.db.refresh(db_data)
         except Exception as e:
             await self.db.rollback()
+            raise e
         return db_data
     
     async def soft_delete(self, model: Base, id: int) -> None:
@@ -63,7 +64,8 @@ class CRUD:
             await self.db.commit()
             await self.db.refresh(db_data)
         except Exception as e:
-            await self.db.rollback()        
+            await self.db.rollback()
+            raise e      
         return True
         
     async def delete(self, model: Base, id: int) -> None:
@@ -77,5 +79,6 @@ class CRUD:
             await self.db.delete(db_data)
             await self.db.commit()
         except Exception as e:
-            await self.db.rollback()        
+            await self.db.rollback()
+            raise e       
         return True

@@ -8,7 +8,7 @@ from app.database.crud_usuario import CRUD_Usuario
 from app.tests.fixtures.usuario import users_in_db
 
 @pytest.mark.asyncio
-async def test_create_user(get_db, users_in_db):
+async def test_create_user(get_db):
     """Testa a criação de um novo usuário."""
     crud = CRUD_Usuario(get_db)
     service = UsuarioService(Usuario, crud)
