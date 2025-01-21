@@ -1,16 +1,23 @@
 DATABASE = {
-    "host": "db",
+    "host": "postgres_db",
     "user": "admin",
     "password": "admin",
     "database": "app_db",
-    "test_database": "test_db",
-    "check_same_thread": False,
     "connection": "postgresql+asyncpg",
     "autocommit": False,
     "autoflush": False,
-    "port": 5439,
-    "test_port": 5440,
-    "extra_params": ""
+    "port": 5432,
+}
+
+DATABASE_TEST = {
+    "host": "postgres_db_test",
+    "user": "admin",
+    "password": "admin",
+    "database": "test_db",
+    "connection": "postgresql+asyncpg",
+    "autocommit": False,
+    "autoflush": False,
+    "port": 5432,
 }
 
 JWT = {

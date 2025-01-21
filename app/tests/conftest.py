@@ -4,20 +4,17 @@ from sqlalchemy.orm import sessionmaker
 from app.database.database import DataBase, Base
 from fastapi.testclient import TestClient
 from app.main import app
-from app.config import DATABASE
+from app.config import DATABASE_TEST
 
-DataBase = DataBase(DATABASE)
+DataBase = DataBase(DATABASE_TEST)
 get_db = DataBase.get_db
 
-DATABASE_URL = (f"postgresql+asyncpg://{DATABASE['user']}:{DATABASE['password']}"
-                + f"@postgres_db:{DATABASE['port']}/{DATABASE['test_database']}")
+DATABASE_URL = f"postgresql+asyncpg://{DATABASE_TEST['user']}:{DATABASE_TEST['password']}@{DATABASE_TEST['host']}:{DATABASE_TEST['port']}/{DATABASE_TEST['database']}"  # noqa
 
 @pytest_asyncio.fixture(scope="function")
 async def get_db():
     """Conexão com o banco de dados para os testes."""
-    engine = create_async_engine(
-        DATABASE_URL, connect_args={"check_same_thread": False}
-    )
+    engine = create_async_engine(DATABASE_URL)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
