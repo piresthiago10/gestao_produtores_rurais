@@ -3,3 +3,5 @@ app/config.py
 *.pyc
 __pycache__/
 *.db
+app.db
+app/logs/log_files/app.log

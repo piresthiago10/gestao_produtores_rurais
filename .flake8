@@ -1,5 +1,5 @@
 [flake8]
-ignore = D104,E226,E302,E41,F405,W503
+ignore = D104,E226,E302,E41,F405,W503,F811,F401
 max-line-length = 99
 max-complexity = 8
 application-import-names = app,models,routers,schemas,scripts,services,tests,utils,mocks,fixtures,integration,unit

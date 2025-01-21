@@ -5,8 +5,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.orm import relationship
 from app.database.database import Base
 
+
 class Usuario(Base):
     """Tabela Usuários."""
+
     __tablename__ = "usuarios"
     id: Mapped[int] = mapped_column(primary_key=True, index=True, autoincrement=True)
     nome: Mapped[str] = mapped_column(nullable=False)
@@ -30,15 +32,19 @@ class Usuario(Base):
     def senha(self, senha_sem_hash: str):
         """Define o hash da senha usando bcrypt."""
         self.senha_hash = bcrypt.hashpw(
-            senha_sem_hash.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            senha_sem_hash.encode("utf-8"), bcrypt.gensalt()
+        ).decode("utf-8")
 
     def verify_password(self, senha_sem_hash: str) -> bool:
         """Verifica se a senha clara corresponde ao hash armazenado."""
-        return bcrypt.checkpw(senha_sem_hash.encode('utf-8'), self.senha_hash.encode('utf-8'))
+        return bcrypt.checkpw(
+            senha_sem_hash.encode("utf-8"), self.senha_hash.encode("utf-8")
+        )
 
 
 class Produtor(Usuario):
     """Classe para o modelo Produtor."""
+
     __tablename__ = "produtores"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
@@ -47,15 +53,17 @@ class Produtor(Usuario):
         "Fazenda",
         back_populates="produtor",
         cascade="save-update, merge",
-        lazy="selectin"
+        lazy="selectin",
     )
     __mapper_args__ = {
         "polymorphic_identity": "produtor",
-        "inherit_condition": Usuario.id == Usuario.id
+        "inherit_condition": Usuario.id == Usuario.id,
     }
+
 
 class Safra(Base):
     """Tabela Safras."""
+
     __tablename__ = "safras"
     id: Mapped[int] = mapped_column(primary_key=True, index=True, autoincrement=True)
     nome: Mapped[str] = mapped_column(nullable=False)
@@ -66,11 +74,11 @@ class Safra(Base):
     produtividade_tonelada: Mapped[float] = mapped_column(nullable=False)
     ativo: Mapped[bool] = mapped_column(nullable=False)
 
-    fazenda_id: Mapped[int] = mapped_column(ForeignKey('fazendas.id'), nullable=True)
+    fazenda_id: Mapped[int] = mapped_column(ForeignKey("fazendas.id"), nullable=True)
 
-    fazenda: Mapped["Fazenda"] = relationship(
+    fazenda: Mapped[list["Fazenda"]] = relationship(
         "Fazenda",
-        back_populates='safra',
+        back_populates="safra",
     )
 
     def __repr__(self):
@@ -82,6 +90,7 @@ class Safra(Base):
             f"ano_colheita={self.ano_colheita}"
             f")>"
         )
+
 
 class Fazenda(Base):
     """Modelo para a tabela Fazendas."""
@@ -97,19 +106,16 @@ class Fazenda(Base):
     area_vegetacao: Mapped[int] = mapped_column(nullable=False)
     ativo: Mapped[bool] = mapped_column(nullable=False)
 
-    produtor_id: Mapped[Optional[int]] = mapped_column(ForeignKey("produtores.id"), nullable=True)
+    produtor_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("produtores.id"), nullable=True
+    )
 
     produtor: Mapped[Optional["Produtor"]] = relationship(
-        "Produtor",
-        back_populates="fazenda",
-        cascade="save-update, merge"
+        "Produtor", back_populates="fazenda", cascade="save-update, merge"
     )
 
     safra: Mapped[List["Safra"]] = relationship(
-        "Safra",
-        back_populates="fazenda",
-        lazy="selectin",
-        cascade="all, delete-orphan"
+        "Safra", back_populates="fazenda", lazy="selectin", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:

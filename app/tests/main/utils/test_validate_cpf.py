@@ -1,6 +1,7 @@
 import pytest
 from app.utils.cpf_validator import validate_cpf
 
+
 @pytest.mark.parametrize(
     "cpf, expected",
     [

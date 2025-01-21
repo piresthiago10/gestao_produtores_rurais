@@ -6,7 +6,7 @@ class Produtor(Usuario):
         """Inicia a classe com suas configurações."""
         self.model = model
         self.db = db
-        
+
     def _is_type_admin(self, data: dict):
         """Verifica se o tipo do produtor é admin."""
         if data["tipo"] == "admin":
@@ -23,3 +23,11 @@ class Produtor(Usuario):
         """Atualiza um produtor."""
         self._is_type_admin(data)
         return await self.db.update(self.model, id, data)
+
+    async def handle_farm_in_producer(
+        self, farm_model: object, producer_id: int, farm_id: int, is_add: bool = True
+    ):
+        """Adiciona uma fazenda a um produtor."""
+        return await self.db.handle_farm_in_producer(
+            self.model, farm_model, producer_id, farm_id, is_add
+        )

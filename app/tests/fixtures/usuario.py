@@ -3,6 +3,7 @@ import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.models import Usuario
 
+
 @pytest_asyncio.fixture(scope="function")
 async def users_in_db(get_db: AsyncSession):
     """Fixture para criar três usuários no banco de dados para os testes."""
@@ -14,7 +15,7 @@ async def users_in_db(get_db: AsyncSession):
             email="maria.oliveira@teste.com.br",
             senha="Senha456!",
             tipo="admin",
-            ativo=True
+            ativo=True,
         ),
         Usuario(
             nome="Carlos Souza",
@@ -23,7 +24,7 @@ async def users_in_db(get_db: AsyncSession):
             email="carlos.souza@teste.com.br",
             senha="Senha789!",
             tipo="comum",
-            ativo=False
+            ativo=False,
         ),
         Usuario(
             nome="Ana Costa",
@@ -32,8 +33,8 @@ async def users_in_db(get_db: AsyncSession):
             email="ana.costa@teste.com.br",
             senha="Senha012!",
             tipo="comum",
-            ativo=True
-        )
+            ativo=True,
+        ),
     ]
 
     async with get_db.begin():

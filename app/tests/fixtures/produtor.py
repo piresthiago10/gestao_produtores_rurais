@@ -3,6 +3,7 @@ import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.models import Produtor
 
+
 @pytest_asyncio.fixture(scope="function")
 async def producers_in_db(get_db: AsyncSession):
     """Fixture para criar três produtores no banco de dados para os testes."""
@@ -14,7 +15,7 @@ async def producers_in_db(get_db: AsyncSession):
             email="bruno.lima@teste.com.br",
             senha="Bruno123!",
             tipo="admin",
-            ativo=True
+            ativo=True,
         ),
         Produtor(
             nome="Laura Pereira",
@@ -23,7 +24,7 @@ async def producers_in_db(get_db: AsyncSession):
             email="laura.pereira@teste.com.br",
             senha="Laura456!",
             tipo="comum",
-            ativo=False
+            ativo=False,
         ),
         Produtor(
             nome="Gustavo Martins",
@@ -32,8 +33,8 @@ async def producers_in_db(get_db: AsyncSession):
             email="gustavo.martins@teste.com.br",
             senha="Gustavo789!",
             tipo="comum",
-            ativo=True
-        )
+            ativo=True,
+        ),
     ]
     async with get_db.begin():
         get_db.add_all(producers)

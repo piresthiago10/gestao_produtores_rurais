@@ -1,8 +1,8 @@
-def validate_cnpj(cnpj):
+def validate_cnpj(cnpj):  # noqa: C901
     """Valida se o CNPJ é válido."""
-    cnpj = cnpj.replace('.', '').replace('/', '').replace('-', '')
+    cnpj = cnpj.replace(".", "").replace("/", "").replace("-", "")
 
-    if cnpj == '00000000000000':
+    if cnpj == "00000000000000":
         return False
 
     if len(cnpj) == 14:
@@ -29,8 +29,20 @@ def validate_cnpj(cnpj):
     except Exception:
         return False
 
-    dig_1_ao_12_somados = (dig_1 + dig_2 + dig_3 + dig_4 + dig_5 + dig_6 +
-                           dig_7 + dig_8 + dig_9 + dig_10 + dig_11 + dig_12)
+    dig_1_ao_12_somados = (
+        dig_1
+        + dig_2
+        + dig_3
+        + dig_4
+        + dig_5
+        + dig_6
+        + dig_7
+        + dig_8
+        + dig_9
+        + dig_10
+        + dig_11
+        + dig_12
+    )
 
     dig_13 = dig_1_ao_12_somados % 11
 
@@ -53,8 +65,21 @@ def validate_cnpj(cnpj):
     dig_12 = int(cnpj[11]) * 8
     dig_13 = int(cnpj[12]) * 9
 
-    dig_1_ao_13_somados = (dig_1 + dig_2 + dig_3 + dig_4 + dig_5 + dig_6 +
-                           dig_7 + dig_8 + dig_9 + dig_10 + dig_11 + dig_12 + dig_13)
+    dig_1_ao_13_somados = (
+        dig_1
+        + dig_2
+        + dig_3
+        + dig_4
+        + dig_5
+        + dig_6
+        + dig_7
+        + dig_8
+        + dig_9
+        + dig_10
+        + dig_11
+        + dig_12
+        + dig_13
+    )
 
     dig_14 = dig_1_ao_13_somados % 11
 
@@ -63,8 +88,17 @@ def validate_cnpj(cnpj):
 
     cnpj_validado = cnpj + str(dig_14)
 
-    cnpj = (cnpj_validado[0:2] + '.' + cnpj_validado[2:5] + '.' +
-            cnpj_validado[5:8] + '/' + cnpj_validado[8:12] + '-' + cnpj_validado[12:])
+    cnpj = (
+        cnpj_validado[0:2]
+        + "."
+        + cnpj_validado[2:5]
+        + "."
+        + cnpj_validado[5:8]
+        + "/"
+        + cnpj_validado[8:12]
+        + "-"
+        + cnpj_validado[12:]
+    )
 
     if validar:
         if digitos_verificadores != cnpj_validado[12:]:

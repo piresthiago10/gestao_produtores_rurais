@@ -3,6 +3,7 @@ import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.models import Fazenda
 
+
 @pytest_asyncio.fixture(scope="function")
 async def farms_in_db(get_db: AsyncSession):
     """Fixture para criar três fazendas no banco de dados para os testes."""
@@ -33,7 +34,7 @@ async def farms_in_db(get_db: AsyncSession):
             area_agricultavel=700,
             area_vegetacao=300,
             ativo=False,
-        )
+        ),
     ]
 
     async with get_db.begin():

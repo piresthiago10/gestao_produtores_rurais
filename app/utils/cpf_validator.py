@@ -1,8 +1,8 @@
-def validate_cpf(cpf):
+def validate_cpf(cpf):  # noqa: C901
     """Valida se o CPF é válido."""
-    cpf = cpf.replace('.', '').replace('-', '')
+    cpf = cpf.replace(".", "").replace("-", "")
 
-    if cpf == '00000000000':
+    if cpf == "00000000000":
         return False
 
     if len(cpf) == 11:
@@ -26,7 +26,9 @@ def validate_cpf(cpf):
     except Exception:
         return False
 
-    dig_1_ao_9_somados = (dig_1 + dig_2 + dig_3 + dig_4 + dig_5 + dig_6 + dig_7 + dig_8 + dig_9)
+    dig_1_ao_9_somados = (
+        dig_1 + dig_2 + dig_3 + dig_4 + dig_5 + dig_6 + dig_7 + dig_8 + dig_9
+    )
 
     dig_10 = dig_1_ao_9_somados % 11
 
@@ -57,11 +59,18 @@ def validate_cpf(cpf):
 
     cpf_validado = cpf + str(dig_11)
 
-    cpf = (cpf_validado[:3] + '.' + cpf_validado[3:6] + '.' +
-           cpf_validado[6:9] + '-' + cpf_validado[9:])
+    cpf = (
+        cpf_validado[:3]
+        + "."
+        + cpf_validado[3:6]
+        + "."
+        + cpf_validado[6:9]
+        + "-"
+        + cpf_validado[9:]
+    )
 
     if validar:
         if digitos_verificadores != cpf_validado[9:]:
             return False
-    
+
     return True
